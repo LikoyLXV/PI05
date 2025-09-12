@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<string> li = {"a", "1", "b", "2", "c", "3"};
+    
+    cout << "Исходный список: ";
+    for (const auto& item : li) {
+        cout << item << " ";
+    }
+    cout << endl;
+    
+    // li_1 = li[0::2] - элементы с четными индексами
+    vector<string> li_1;
+    for (size_t i = 0; i < li.size(); i += 2) {
+        li_1.push_back(li[i]);
+    }
+    
+    // li_2 = li[1::2] - элементы с нечетными индексами
+    vector<string> li_2;
+    for (size_t i = 1; i < li.size(); i += 2) {
+        li_2.push_back(li[i]);
+    }
+    
+    // del li - удаляем исходный список
+    li.clear();
+    
+    cout << "li_1 (четные индексы): ";
+    for (const auto& item : li_1) {
+        cout << item << " ";
+    }
+    cout << endl;
+    
+    cout << "li_2 (нечетные индексы): ";
+    for (const auto& item : li_2) {
+        cout << item << " ";
+    }
+    cout << endl;
+    
+    cout << "li после удаления: ";
+    for (const auto& item : li) {
+        cout << item << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}
