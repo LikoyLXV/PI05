@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    string str = "AaBbCcDd";
+    string uppercase, lowercase;
+    
+    // С заглавными буквами (шаг 2, начиная с индекса 0)
+    for (int i = 0; i < str.length(); i += 2) {
+        uppercase += str[i];
+    }
+    
+    // Со строчными буквами (шаг 2, начиная с индекса 1)
+    for (int i = 1; i < str.length(); i += 2) {
+        lowercase += str[i];
+    }
+    
+    cout << "Заглавные: " << uppercase << endl; // ABCD
+    cout << "Строчные: " << lowercase << endl;   // abcd
+    
+    return 0;
+}
