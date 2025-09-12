@@ -1,0 +1,27 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Main {
+    public static void main(String[] args) {
+        String str = "AaBbCcDd";
+        
+        // С заглавными буквами
+        Pattern patternUpper = Pattern.compile("(\\p{Lu})\\p{Ll}");
+        Matcher matcherUpper = patternUpper.matcher(str);
+        StringBuilder uppercase = new StringBuilder();
+        while (matcherUpper.find()) {
+            uppercase.append(matcherUpper.group(1));
+        }
+        
+        // Со строчными буквами
+        Pattern patternLower = Pattern.compile("\\p{Lu}(\\p{Ll})");
+        Matcher matcherLower = patternLower.matcher(str);
+        StringBuilder lowercase = new StringBuilder();
+        while (matcherLower.find()) {
+            lowercase.append(matcherLower.group(1));
+        }
+        
+        System.out.println("Заглавные: " + uppercase.toString()); // ABCD
+        System.out.println("Строчные: " + lowercase.toString());   // abcd
+    }
+}
