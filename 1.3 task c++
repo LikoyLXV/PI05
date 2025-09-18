@@ -1,29 +1,32 @@
 #include <iostream>
-
-using namespace std;
+#include <stack> // Включаем заголовочный файл для std::stack
 
 int main() {
-  int steck[20];
-  int i = -1;  // объявили стек
-    
-  for (int j = 0; j < 6; j++) {
-    int a;
-       
-    cin >> a;      
+    std::stack<int> myStack; // Создаем стек целых чисел
 
-    i++;  // увеличиваем i на один
-      
-    steck[i] = a;  // добавляем в стек элемент
-  }
-   
-  if (i == -1) cout << "Стек пуст";  // проверяем пуст ли стек (нет)
-    
-  cout << steck[i] << " это верхний элемент стека";
-    
-  cout << "Сейчас мы удалим верхний элемент";
-    
-  i--;  // уменьшаем i на один
+    // Добавляем элементы в стек (операция push)
+    myStack.push(10);
+    myStack.push(20);
+    myStack.push(30);
+    std::cout << "Стек после добавления элементов: " << myStack.size() << std::endl; // Размер: 3
 
-  system("pause");
-  return 0;
+    // Получаем верхний элемент без удаления (операция top)
+    std::cout << "Верхний элемент стека: " << myStack.top() << std::endl; // 30
+
+    // Удаляем верхний элемент (операция pop)
+    myStack.pop();
+    std::cout << "Стек после первого удаления: " << myStack.size() << std::endl; // Размер: 2
+
+    // Получаем новый верхний элемент
+    std::cout << "Новый верхний элемент: " << myStack.top() << std::endl; // 20
+
+    // Удаляем остальные элементы до опустошения стека
+    while (!myStack.empty()) { // Проверяем, не пуст ли стек
+        std::cout << "Извлекаем: " << myStack.top() << std::endl;
+        myStack.pop(); // Удаляем
+    }
+
+    std::cout << "Стек после всех удалений: " << myStack.size() << std::endl; // Размер: 0
+
+    return 0;
 }
