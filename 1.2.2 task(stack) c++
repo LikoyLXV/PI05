@@ -1,23 +1,58 @@
 #include <iostream>
-#include <queue> // стандартная очередь
 
+class MyStack {
+private:
+    int* arr;   // массив для хранения
+    int top;    // индекс верхушки
+    int capacity; // размер стека
+
+public:
+    MyStack(int size) {
+        capacity = size;
+        arr = new int[size];
+        top = -1;
+    }
+
+    ~MyStack() { delete[] arr; }
+
+    void push(int x) {
+        if (top == capacity - 1) {
+            std::cout << "Стек переполнен!\n";
+            return;
+        }
+        arr[++top] = x;
+    }
+
+    int pop() {
+        if (isEmpty()) {
+            std::cout << "Стек пуст!\n";
+            return -1;
+        }
+        return arr[top--];
+    }
+
+    int peek() {
+        if (isEmpty()) {
+            std::cout << "Стек пуст!\n";
+            return -1;
+        }
+        return arr[top];
+    }
+
+    bool isEmpty() { return top == -1; }
+};
+
+// Пример использования
 int main() {
-    std::queue<int> q; // создаем очередь
+    MyStack st(3);
 
-    // Добавление элементов (push = вставка в конец)
-    q.push(10);
-    q.push(20);
-    q.push(30);
+    st.push(10);
+    st.push(20);
+    st.push(30);
 
-    std::cout << "Первый элемент: " << q.front() << std::endl; // 10
-
-    // Удаление первого элемента
-    q.pop();
-    std::cout << "Теперь первый элемент: " << q.front() << std::endl; // 20
-
-    // Проверка на пустоту
-    std::cout << "Очередь пуста? " << (q.empty() ? "Да" : "Нет") << std::endl;
+    std::cout << "Верхний элемент: " << st.peek() << std::endl; // 30
+    std::cout << "Удалён: " << st.pop() << std::endl;          // 30
+    std::cout << "Верхний теперь: " << st.peek() << std::endl; // 20
 
     return 0;
 }
-
