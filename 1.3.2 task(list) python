@@ -1,0 +1,31 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class SimpleList:
+    def __init__(self):
+        self.head = None
+
+    def add(self, val):  # добавление в конец
+        new = Node(val)
+        if not self.head:
+            self.head = new
+            return
+        cur = self.head
+        while cur.next:
+            cur = cur.next
+        cur.next = new
+
+    def print(self):
+        cur = self.head
+        while cur:
+            print(cur.data, end=" ")
+            cur = cur.next
+
+# Тест
+lst = SimpleList()
+lst.add(10)
+lst.add(20)
+lst.add(30)
+lst.print()  # 10 20 30
