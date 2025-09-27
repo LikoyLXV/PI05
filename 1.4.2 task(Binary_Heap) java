@@ -1,0 +1,18 @@
+import java.util.PriorityQueue;
+import java.util.Arrays;
+
+public class StdDemo {
+    public static void main(String[] args) {
+        // --- Вариант 1: min-heap по умолчанию ---
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        pq.addAll(Arrays.asList(3,1,4,1,5,9));
+        while (!pq.isEmpty()) System.out.print(pq.poll() + " ");
+        System.out.println();
+
+        // --- Вариант 2: max-heap через компаратор ---
+        PriorityQueue<Integer> maxq = new PriorityQueue<>((a,b) -> b - a);
+        maxq.addAll(Arrays.asList(10, 2, 7));
+        while (!maxq.isEmpty()) System.out.print(maxq.poll() + " ");
+        System.out.println();
+    }
+}
