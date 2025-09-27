@@ -1,0 +1,29 @@
+#include <iostream>
+#include <vector>
+#include <algorithm> // make_heap, push_heap, pop_heap
+#include <queue>     // priority_queue
+using namespace std;
+
+int main() {
+    // --- Вариант 1: make_heap / push_heap / pop_heap ---
+    vector<int> a = {3,1,4,1,5,9};
+    make_heap(a.begin(), a.end()); // построение max-heap за O(n)
+
+    // Извлечение всех элементов
+    while (!a.empty()) {
+        pop_heap(a.begin(), a.end()); // максимум уходит в конец
+        cout << a.back() << " ";
+        a.pop_back(); // удаляем его
+    }
+    cout << "\n";
+
+    // --- Вариант 2: priority_queue ---
+    priority_queue<int> pq; // по умолчанию max-heap
+    pq.push(10); pq.push(2); pq.push(7);
+    while (!pq.empty()) {
+        cout << pq.top() << " "; // получаем максимум
+        pq.pop(); // удаляем максимум
+    }
+    cout << "\n";
+    return 0;
+}
