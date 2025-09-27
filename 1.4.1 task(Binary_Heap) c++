@@ -1,0 +1,70 @@
+// BinaryHeap.hpp
+#include <vector>
+#include <functional>
+#include <stdexcept>
+
+// Шаблонный класс бинарной кучи
+// По умолчанию работает как max-heap (std::less<T>)
+template<typename T, typename Compare = std::less<T>>
+class BinaryHeap {
+public:
+    BinaryHeap(Compare comp = Compare()) : comp(comp) {}
+
+    // Конструктор из готового массива: строим кучу за O(n)
+    BinaryHeap(const std::vector<T>& arr, Compare comp = Compare()) : data(arr), comp(comp) {
+        for (int i = int(data.size() / 2) - 1; i >= 0; --i) siftDown(i);
+    }
+
+    // Вставка нового элемента за O(log n)
+    void push(const T& value) {
+        data.push_back(value);
+        siftUp(int(data.size()) - 1);
+    }
+
+    // Удаление максимального (или минимального для min-heap) элемента за O(log n)
+    void pop() {
+        if (data.empty()) throw std::out_of_range("pop from empty heap");
+        data[0] = data.back(); // перенесли последний элемент в корень
+        data.pop_back();
+        if (!data.empty()) siftDown(0); // "просеивание вниз"
+    }
+
+    // Доступ к корневому элементу (максимум/минимум)
+    const T& top() const {
+        if (data.empty()) throw std::out_of_range("top from empty heap");
+        return data[0];
+    }
+
+    bool empty() const { return data.empty(); }
+    size_t size() const { return data.size(); }
+
+private:
+    std::vector<T> data; // массив для хранения элементов
+    Compare comp;        // компаратор (по умолчанию std::less)
+
+    // "Просеивание вверх" — для вставки
+    void siftUp(int idx) {
+        while (idx > 0) {
+            int parent = (idx - 1) / 2;
+            // если родитель уже "правильный", выходим
+            if (!comp(data[parent], data[idx])) break;
+            std::swap(data[parent], data[idx]);
+            idx = parent;
+        }
+    }
+
+    // "Просеивание вниз" — для удаления
+    void siftDown(int idx) {
+        int n = int(data.size());
+        while (true) {
+            int left = idx * 2 + 1;
+            int right = left + 1;
+            int largest = idx;
+            if (left < n && comp(data[largest], data[left])) largest = left;
+            if (right < n && comp(data[largest], data[right])) largest = right;
+            if (largest == idx) break;
+            std::swap(data[idx], data[largest]);
+            idx = largest;
+        }
+    }
+};
