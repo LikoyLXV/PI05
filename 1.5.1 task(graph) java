@@ -1,0 +1,67 @@
+import java.util.*;
+
+class Dijkstra {
+    static class Edge {
+        int to, weight;
+        Edge(int to, int weight) {
+            this.to = to;
+            this.weight = weight;
+        }
+    }
+
+    public static int[] dijkstra(List<List<Edge>> graph, int start) {
+        int n = graph.size();
+        int[] dist = new int[n];                 // минимальные расстояния
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[start] = 0;
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.offer(new int[]{start, 0});
+
+        while (!pq.isEmpty()) {
+            int[] cur = pq.poll();
+            int v = cur[0], d = cur[1];
+
+            if (d > dist[v]) continue; // уже нашли лучший путь
+
+            for (Edge e : graph.get(v)) {
+                int next = e.to;
+                int newDist = dist[v] + e.weight;
+
+                if (newDist < dist[next]) {
+                    dist[next] = newDist;
+                    pq.offer(new int[]{next, newDist});
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    public static void main(String[] args) {
+        int n = 5; // количество вершин
+        List<List<Edge>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        // Добавляем рёбра (пример: граф ненаправленный)
+        graph.get(0).add(new Edge(1, 10));
+        graph.get(0).add(new Edge(2, 3));
+        graph.get(1).add(new Edge(2, 1));
+        graph.get(1).add(new Edge(3, 2));
+        graph.get(2).add(new Edge(1, 4));
+        graph.get(2).add(new Edge(3, 8));
+        graph.get(2).add(new Edge(4, 2));
+        graph.get(3).add(new Edge(4, 7));
+        graph.get(4).add(new Edge(3, 9));
+
+        int start = 0;
+        int[] dist = dijkstra(graph, start);
+
+        System.out.println("Кратчайшие расстояния от вершины " + start + ":");
+        for (int i = 0; i < dist.length; i++) {
+            System.out.println("До вершины " + i + " = " + dist[i]);
+        }
+    }
+}
