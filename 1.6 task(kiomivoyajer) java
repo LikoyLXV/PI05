@@ -1,0 +1,91 @@
+import java.util.*;
+import java.lang.*;
+
+public class NearestNeighborPath {
+    
+    // Вспомогательная функция для вычисления квадрата числа
+    private static long sqr(long x) {
+        return x * x;
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Чтение количества точек
+        int n = scanner.nextInt();
+        
+        // Массивы для хранения координат точек
+        long[] x = new long[n];
+        long[] y = new long[n];
+        
+        // Список для хранения текущего пути
+        List<Integer> path = new ArrayList<>();
+        // Массив для отметки использованных точек
+        boolean[] used = new boolean[n];
+        
+        // Инициализация переменных для поиска начальной вершины
+        long minDist = Long.MAX_VALUE;
+        int startVertex = 0;
+        
+        // Чтение координат всех точек
+        for (int i = 0; i < n; i++) {
+            x[i] = scanner.nextLong();
+            y[i] = scanner.nextLong();
+            used[i] = false; // Изначально все точки не использованы
+        }
+        
+        // Поиск пары ближайших точек для выбора начальной вершины
+        // Перебираем все пары точек (i, j) где j < i
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                // Вычисление евклидова расстояния между точками i и j
+                // Используем double для точности вычислений
+                double distance = Math.sqrt(sqr(x[i] - x[j]) + sqr(y[i] - y[j]));
+                
+                // Если нашли более близкую пару точек, обновляем данные
+                if (distance < minDist) {
+                    minDist = (long) distance;
+                    startVertex = i; // Выбираем точку i как начальную
+                }
+            }
+        }
+        
+        // Начинаем построение пути с выбранной начальной вершины
+        path.add(startVertex);
+        used[startVertex] = true; // Помечаем начальную вершину как использованную
+        
+        // Построение оставшейся части пути (жадный алгоритм ближайшего соседа)
+        while (path.size() < n) {
+            // Берем последнюю точку из текущего пути
+            int currentPoint = path.get(path.size() - 1);
+            long currentMinDist = Long.MAX_VALUE;
+            int closestPoint = -1;
+            
+            // Поиск ближайшей неиспользованной точки к текущей точке
+            for (int i = 0; i < n; i++) {
+                if (!used[i]) {
+                    // Вычисление расстояния от текущей точки до точки i
+                    double distance = Math.sqrt(sqr(x[currentPoint] - x[i]) + sqr(y[currentPoint] - y[i]));
+                    
+                    // Если нашли точку ближе, чем текущий минимум, обновляем данные
+                    if (distance < currentMinDist) {
+                        currentMinDist = (long) distance;
+                        closestPoint = i;
+                    }
+                }
+            }
+            
+            // Добавляем найденную ближайшую точку в путь
+            path.add(closestPoint);
+            used[closestPoint] = true; // Помечаем как использованную
+        }
+        
+        // Вывод результата - порядок обхода точек
+        // Добавляем 1 к индексам, так как в задаче обычно используется 1-индексация
+        for (int i = 0; i < n; i++) {
+            System.out.print((path.get(i) + 1) + " ");
+        }
+        
+        scanner.close();
+    }
+}
