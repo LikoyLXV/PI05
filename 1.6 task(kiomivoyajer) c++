@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <cmath>
+#include <random>
+#include <limits.h>
+using namespace std;
+
+// Вспомогательная функция для вычисления квадрата числа
+long long sqr(long long x) {
+    return x * x;
+}
+
+int main() {
+    long long n;
+    cin >> n; // Чтение количества точек
+    
+    // Массивы для хранения координат точек
+    long long x[n];
+    long long y[n];
+    vector<int> path;   // Вектор для хранения текущего пути
+    bool used[n];       // Массив для отметки использованных точек
+
+    long long dist;
+    long long v0dist = LLONG_MAX; // Инициализация минимального расстояния
+    int v0 = 0; // Начальная вершина по умолчанию
+
+    // Чтение координат и инициализация
+    for (int i = 0; i < n; i++) {
+        cin >> x[i] >> y[i];
+        used[i] = false; // Отмечаем все точки как неиспользованные
+        
+        // Поиск ближайшей пары точек для выбора начальной вершины
+        for (int j = 0; j < i; j++) {
+            // Вычисление евклидова расстояния между точками i и j
+            dist = sqrtl(sqr(x[i] - x[j]) + sqr(y[i] - y[j]));
+            // Обновление минимального расстояния и начальной вершины
+            if (dist < v0dist) {
+                v0dist = dist;
+                v0 = i; // Выбираем точку i как начальную
+            }
+        }
+    }
+
+    // Начинаем построение пути с выбранной начальной вершины
+    path.push_back(v0);
+    used[v0] = true; // Помечаем начальную вершину как использованную
+
+    // Построение оставшейся части пути
+    while (path.size() != n) {
+        long long cur_el = path[path.size() - 1]; // Текущая точка пути
+        long long min_dist = LLONG_MAX; // Инициализация минимального расстояния
+        int closest_i = -1; // Индекс ближайшей точки
+
+        // Поиск ближайшей неиспользованной точки
+        for (int i = 0; i < n; i++) {
+            if (!used[i]) {
+                // Вычисление расстояния от текущей точки до точки i
+                dist = sqrtl(sqr(x[cur_el] - x[i]) + sqr(y[cur_el] - y[i]));
+                // Обновление ближайшей точки
+                if (dist < min_dist) {
+                    min_dist = dist;
+                    closest_i = i;
+                }
+            }
+        }
+        
+        // Добавление найденной точки в путь
+        path.push_back(closest_i);
+        used[closest_i] = true; // Помечаем как использованную
+    }
+
+    // Вывод результата (номера точек в 1-индексации)
+    for (int i = 0; i < n; i++) {
+        cout << path[i] + 1 << " ";
+    }
+    
+    return 0;
+}
