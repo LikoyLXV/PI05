@@ -1,0 +1,64 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+void beadSort(std::vector<int>& arr) {
+    int n = arr.size();
+    
+    // Находим максимальный элемент для определения количества "столбцов"
+    int max = *std::max_element(arr.begin(), arr.end());
+    
+    // Создаем "доску" с бусинами
+    std::vector<std::vector<bool>> beads(n, std::vector<bool>(max, false));
+    
+    // Расставляем бусины согласно значениям массива
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < arr[i]; j++) {
+            beads[i][j] = true;
+        }
+    }
+    
+    // Под действием гравитации бусины "падают" вниз
+    for (int j = 0; j < max; j++) {
+        int sum = 0;
+        
+        // Считаем количество бусин в каждом столбце
+        for (int i = 0; i < n; i++) {
+            if (beads[i][j]) {
+                sum++;
+                beads[i][j] = false;
+            }
+        }
+        
+        // "Падение" бусин - размещаем их внизу столбца
+        for (int i = n - sum; i < n; i++) {
+            beads[i][j] = true;
+        }
+    }
+    
+    // Преобразуем обратно в массив чисел
+    for (int i = 0; i < n; i++) {
+        int count = 0;
+        for (int j = 0; j < max && beads[i][j]; j++) {
+            count++;
+        }
+        arr[i] = count;
+    }
+}
+
+// Пример использования
+int main() {
+    std::vector<int> arr = {3, 1, 4, 1, 5, 9, 2, 6};
+    
+    std::cout << "Исходный массив: ";
+    for (int num : arr) std::cout << num << " ";
+    std::cout << std::endl;
+    
+    beadSort(arr);
+    
+    std::cout << "Отсортированный массив: ";
+    for (int num : arr) std::cout << num << " ";
+    std::cout << std::endl;
+    
+    return 0;
+}
