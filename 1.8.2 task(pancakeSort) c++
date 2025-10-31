@@ -1,0 +1,62 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+// Функция для переворота массива от начала до заданного индекса
+void flip(std::vector<int>& arr, int i) {
+    int start = 0;
+    while (start < i) {
+        std::swap(arr[start], arr[i]);
+        start++;
+        i--;
+    }
+}
+
+// Функция для поиска индекса максимального элемента в подмассиве
+int findMaxIndex(const std::vector<int>& arr, int n) {
+    int maxIndex = 0;
+    for (int i = 0; i < n; i++) {
+        if (arr[i] > arr[maxIndex]) {
+            maxIndex = i;
+        }
+    }
+    return maxIndex;
+}
+
+void pancakeSort(std::vector<int>& arr) {
+    int n = arr.size();
+    
+    // Начинаем с полного массива и постепенно уменьшаем размер
+    for (int currSize = n; currSize > 1; currSize--) {
+        // Находим индекс максимального элемента в текущем подмассиве
+        int maxIndex = findMaxIndex(arr, currSize);
+        
+        // Если максимальный элемент не на своем месте
+        if (maxIndex != currSize - 1) {
+            // Переворачиваем массив до максимального элемента,
+            // чтобы поставить его в начало
+            flip(arr, maxIndex);
+            
+            // Теперь переворачиваем весь текущий подмассив,
+            // чтобы поставить максимальный элемент в конец
+            flip(arr, currSize - 1);
+        }
+    }
+}
+
+// Пример использования
+int main() {
+    std::vector<int> arr = {23, 10, 20, 11, 12, 6, 7};
+    
+    std::cout << "Исходный массив: ";
+    for (int num : arr) std::cout << num << " ";
+    std::cout << std::endl;
+    
+    pancakeSort(arr);
+    
+    std::cout << "Отсортированный массив: ";
+    for (int num : arr) std::cout << num << " ";
+    std::cout << std::endl;
+    
+    return 0;
+}
