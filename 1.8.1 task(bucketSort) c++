@@ -1,0 +1,47 @@
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+void bucketSort(std::vector<float>& arr) {
+    int n = arr.size();
+    
+    // 1. Создаем n пустых блоков (ведер)
+    std::vector<std::vector<float>> buckets(n);
+    
+    // 2. Распределяем элементы по блокам
+    for (int i = 0; i < n; i++) {
+        // Вычисляем индекс блока для текущего элемента
+        int bucketIndex = n * arr[i];
+        buckets[bucketIndex].push_back(arr[i]);
+    }
+    
+    // 3. Сортируем каждый блок индивидуально
+    for (int i = 0; i < n; i++) {
+        std::sort(buckets[i].begin(), buckets[i].end());
+    }
+    
+    // 4. Объединяем все блоки в исходный массив
+    int index = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < buckets[i].size(); j++) {
+            arr[index++] = buckets[i][j];
+        }
+    }
+}
+
+// Пример использования
+int main() {
+    std::vector<float> arr = {0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434};
+    
+    std::cout << "Исходный массив: ";
+    for (float num : arr) std::cout << num << " ";
+    std::cout << std::endl;
+    
+    bucketSort(arr);
+    
+    std::cout << "Отсортированный массив: ";
+    for (float num : arr) std::cout << num << " ";
+    std::cout << std::endl;
+    
+    return 0;
+}
