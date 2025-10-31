@@ -1,0 +1,82 @@
+#include <vector>
+#include <iostream>
+
+// Троичный поиск для нахождения минимума унимодальной функции
+double ternarySearchMin(double left, double right, double eps) {
+    while (right - left > eps) {
+        // Делим интервал на три части
+        double mid1 = left + (right - left) / 3;
+        double mid2 = right - (right - left) / 3;
+        
+        // Пример функции: f(x) = x² - 4x + 4 (минимум в x=2)
+        double f1 = mid1 * mid1 - 4 * mid1 + 4;
+        double f2 = mid2 * mid2 - 4 * mid2 + 4;
+        
+        // Сравниваем значения функции в точках mid1 и mid2
+        if (f1 < f2) {
+            // Минимум в левой трети
+            right = mid2;
+        } else {
+            // Минимум в правой трети
+            left = mid1;
+        }
+    }
+    
+    return (left + right) / 2;
+}
+
+// Троичный поиск в отсортированном массиве
+int ternarySearchArray(const std::vector<int>& arr, int target) {
+    int left = 0;
+    int right = arr.size() - 1;
+    
+    while (left <= right) {
+        // Делим текущий интервал на три части
+        int mid1 = left + (right - left) / 3;
+        int mid2 = right - (right - left) / 3;
+        
+        // Проверяем, не нашли ли элемент в точках деления
+        if (arr[mid1] == target) {
+            return mid1;
+        }
+        if (arr[mid2] == target) {
+            return mid2;
+        }
+        
+        // Определяем, в какой трети может находиться искомый элемент
+        if (target < arr[mid1]) {
+            // Искомый элемент в левой трети
+            right = mid1 - 1;
+        } else if (target > arr[mid2]) {
+            // Искомый элемент в правой трети
+            left = mid2 + 1;
+        } else {
+            // Искомый элемент в средней трети
+            left = mid1 + 1;
+            right = mid2 - 1;
+        }
+    }
+    
+    return -1;
+}
+
+// Пример использования
+int main() {
+    // Пример 1: Поиск минимума функции
+    double minPoint = ternarySearchMin(0, 5, 1e-6);
+    std::cout << "Минимум функции f(x) = x² - 4x + 4 в точке: " << minPoint << std::endl;
+    
+    // Пример 2: Поиск в массиве
+    std::vector<int> arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int target = 6;
+    
+    int result = ternarySearchArray(arr, target);
+    
+    if (result != -1) {
+        std::cout << "Элемент " << target << " найден на позиции " << result << std::endl;
+    } else {
+        std::cout << "Элемент " << target << " не найден" << std::endl;
+    }
+    
+    return 0;
+}
