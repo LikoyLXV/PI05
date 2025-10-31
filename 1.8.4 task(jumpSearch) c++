@@ -1,0 +1,64 @@
+#include <vector>
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+
+int jumpSearch(const std::vector<int>& arr, int target) {
+    int n = arr.size();
+    
+    // Если массив пустой
+    if (n == 0) return -1;
+    
+    // Определяем оптимальный размер прыжка (квадратный корень из n)
+    int step = sqrt(n);
+    
+    int prev = 0;
+    
+    // Прыгаем вперед, пока не найдем блок, где может быть элемент
+    while (arr[std::min(step, n) - 1] < target) {
+        prev = step;
+        step += sqrt(n);
+        
+        // Если вышли за границы массива
+        if (prev >= n) {
+            return -1;
+        }
+    }
+    
+    // Линейный поиск в найденном блоке
+    while (arr[prev] < target) {
+        prev++;
+        
+        // Если дошли до конца блока или массива
+        if (prev == std::min(step, n)) {
+            return -1;
+        }
+    }
+    
+    // Если нашли элемент
+    if (arr[prev] == target) {
+        return prev;
+    }
+    
+    return -1;
+}
+
+// Пример использования
+int main() {
+    std::vector<int> arr = {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144};
+    int target = 55;
+    
+    std::cout << "Массив: ";
+    for (int num : arr) std::cout << num << " ";
+    std::cout << std::endl;
+    
+    int result = jumpSearch(arr, target);
+    
+    if (result != -1) {
+        std::cout << "Элемент " << target << " найден на позиции " << result << std::endl;
+    } else {
+        std::cout << "Элемент " << target << " не найден" << std::endl;
+    }
+    
+    return 0;
+}
