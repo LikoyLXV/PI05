@@ -1,0 +1,30 @@
+#include <iostream>
+using namespace std;
+
+// Рекурсивная функция для подсчета суммы элементов массива
+// arr - массив
+// index - текущий индекс (начинается с 0)
+// size - размер массива
+int arraySum(int arr[], int index, int size) {
+    // Базовый случай: если дошли до конца массива
+    if (index >= size) {
+        return 0;
+    }
+
+    // Рекурсивный случай:
+    // Сумма = текущий элемент + сумма всех последующих элементов
+    return arr[index] + arraySum(arr, index + 1, size);
+}
+
+// функция для удобного вызова
+int arraySum(int arr[], int size) {
+    return arraySum(arr, 0, size);
+}
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 5};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    cout << "Сумма элементов: " << arraySum(arr, size) << endl;
+    return 0;
+}
