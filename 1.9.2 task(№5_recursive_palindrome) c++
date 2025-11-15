@@ -1,0 +1,41 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+// Рекурсия для проверки палиндрома
+bool isPalindrome(const string& str, int left, int right) {
+    // Пропускаем не буквы
+    while (left < right && !isalnum(str[left])) left++;
+    while (left < right && !isalnum(str[right])) right--;
+
+    // Базовый случай
+    if (left >= right) return true;
+
+    // Сравниваем символы
+    if (tolower(str[left]) != tolower(str[right])) return false;
+
+    // Рекурсивный вызов
+    return isPalindrome(str, left + 1, right - 1);
+}
+
+// удобный вызов
+bool isPalindrome(const string& str) {
+    return isPalindrome(str, 0, str.length() - 1);
+}
+
+int main() {
+    // Тесты
+    string testStrings[] = {
+        "radar", "hello", "a", "",
+        "Racecar", "A man a plan a canal Panama",
+        "Was it a car or a cat I saw?", "Hello, World!"
+    };
+
+    for (const string& s : testStrings) {
+        cout << "\"" << s << "\": "
+             << (isPalindrome(s) ? "да" : "нет") << endl;
+    }
+
+    return 0;
+}
