@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+// Рекурсивная функция для генерации всех бинарных строк длины n
+// current - текущая формируемая строка
+// n - желаемая длина строки
+// results - вектор для хранения всех результатов
+void generateBinaryStrings(string current, int n, vector<string>& results) {
+    // Базовый случай: если текущая строка достигла нужной длины
+    if (current.length() == n) {
+        results.push_back(current); // Добавляем готовую строку в результаты
+        return;
+    }
+
+    // Рекурсивный случай: добавляем '0' и продолжаем
+    generateBinaryStrings(current + "0", n, results);
+
+    // Рекурсивный случай: добавляем '1' и продолжаем
+    generateBinaryStrings(current + "1", n, results);
+}
+
+// Альтернативная версия с backtracking (более эффективная)
+// Позволяет избежать создания множества временных строк
+void generateBinaryStringsBacktrack(string& current, int n, vector<string>& results) {
+    // Базовый случай: если текущая строка достигла нужной длины
+    if (current.length() == n) {
+        results.push_back(current); // Добавляем готовую строку в результаты
+        return;
+    }
+
+    // Добавляем '0' и рекурсивно продолжаем
+    current.push_back('0');
+    generateBinaryStringsBacktrack(current, n, results);
+    current.pop_back(); // Backtrack: удаляем последний символ
+
+    // Добавляем '1' и рекурсивно продолжаем
+    current.push_back('1');
+    generateBinaryStringsBacktrack(current, n, results);
+    current.pop_back(); // Backtrack: удаляем последний символ
+}
+
+// Функция для вывода всех бинарных строк
+void printBinaryStrings(int n) {
+    vector<string> results;
+
+    // Используем первую версию (проще для понимания)
+    generateBinaryStrings("", n, results);
+
+    // Выводим результаты
+    cout << "Все бинарные строки длины " << n << ":" << endl;
+    for (int i = 0; i < results.size(); i++) {
+        cout << results[i] << " ";
+        // Выводим по 8 строк в строке для лучшей читаемости
+        if ((i + 1) % 8 == 0) cout << endl;
+    }
+    cout << endl;
+
+    // Выводим общее количество
+    cout << "Всего: " << results.size() << " строк" << endl;
+}
+
+int main() {
+    int n;
+
+    cout << "Введите длину бинарных строк (n): ";
+    cin >> n;
+
+    if (n < 0) {
+        cout << "Длина не может быть отрицательной!" << endl;
+        return 1;
+    }
+
+    if (n > 10) {
+        cout << "Внимание: при n > 10 количество строк очень большое (" << (1 << n) << ")" << endl;
+        cout << "Продолжить? (y/n): ";
+        char choice;
+        cin >> choice;
+        if (choice != 'y' && choice != 'Y') {
+            return 0;
+        }
+    }
+
+    printBinaryStrings(n);
+
+    // для небольших значений
+    if (n <= 4) {
+        vector<string> results;
+        string current = "";
+        generateBinaryStringsBacktrack(current, n, results);
+
+        for (const string& s : results) {
+            cout << s << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
