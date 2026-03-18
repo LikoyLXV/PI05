@@ -1,0 +1,90 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Computer {
+private:
+    string inventoryNumber;
+    string model;
+    int yearOfManufacture;
+    string status;
+
+public:
+    Computer() {
+        inventoryNumber = "Не указан";
+        model = "Не указана";
+        yearOfManufacture = 2000;
+        status = "В эксплуатации";
+    }
+
+    Computer(string invNum, string mdl, int year, string stat) {
+        inventoryNumber = invNum;
+        model = mdl;
+        yearOfManufacture = (year >= 1980 && year <= 2026) ? year : 2000;
+        status = (stat == "В эксплуатации" || stat == "Списан") ? stat : "В эксплуатации";
+    }
+
+    ~Computer() {
+        cout << "Объект " << inventoryNumber << " уничтожен" << endl;
+    }
+
+    string getInventoryNumber() { return inventoryNumber; }
+    string getModel() { return model; }
+    
+    void setYearOfManufacture(int year) {
+        if (year >= 1980 && year <= 2026) {
+            yearOfManufacture = year;
+        }
+    }
+
+    void setStatus(string stat) {
+        if (stat == "В эксплуатации" || stat == "Списан") {
+            status = stat;
+        }
+    }
+
+    void writeOff() {
+        if (status != "Списан") {
+            status = "Списан";
+            cout << "Техника " << inventoryNumber << " списана" << endl;
+        }
+    }
+
+    bool needsReplacement(int thresholdYear) {
+        return yearOfManufacture < thresholdYear;
+    }
+
+    void printInfo() {
+        cout << "\nИнв. номер: " << inventoryNumber << endl;
+        cout << "Модель: " << model << endl;
+        cout << "Год: " << yearOfManufacture << endl;
+        cout << "Статус: " << status << endl;
+    }
+};
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+    
+    Computer comp1;
+    Computer comp2("A-123", "HP", 2022, "В эксплуатации");
+    Computer comp3("B-456", "Dell", 1950, "В ремонте");
+    
+    comp1.printInfo();
+    comp2.printInfo();
+    comp3.printInfo();
+    
+    cout << "\nМодель comp2: " << comp2.getModel() << endl;
+    
+    comp1.setYearOfManufacture(2023);
+    comp1.setStatus("Списан");
+    comp1.printInfo();
+    
+    comp2.writeOff();
+    comp2.writeOff();
+    
+    if (comp1.needsReplacement(2020)) {
+        cout << "comp1 требует замены" << endl;
+    }
+    
+    return 0;
+}
